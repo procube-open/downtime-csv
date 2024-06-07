@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "downtime-csv"
-version = "0.1.0"
+version = "1.0.0-rc.0"
 description = ""
 authors = ["Mitsuru Nakakawaji <mitsuru@procube.jp>"]
 readme = "README.md"
@@ -13,6 +13,9 @@ asyncio = "^3.4.3"
 [tool.poetry-dynamic-versioning]
 enable = true
 style = "pep440"
+
+[tool.poetry-version-plugin]
+source = "git-tag"
 
 [tool.poetry.scripts]
 downtime-csv = 'downtime_csv.__main__:main'
