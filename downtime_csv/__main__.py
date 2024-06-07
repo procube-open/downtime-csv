@@ -21,7 +21,7 @@ async def doQuery():
             mlsec = int(tat_start % 1000000000 / 1000000)
             print(f'{time.strftime('%X', time.localtime(tat_start/1000000000))}.{str(mlsec).zfill(3)},{int(tat/1000000)},{resp.status}')
 
-async def main():
+async def downtime():
     task_list = []
     for i in range(1500):
         task_list.append(asyncio.create_task(doQuery()))
@@ -29,6 +29,8 @@ async def main():
     for j in task_list:
         await j
 
+def main():
+    asyncio.run(downtime())
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    main()

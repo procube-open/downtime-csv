@@ -1,0 +1,8 @@
+{
+    "name": "ID Manager for SOBO gen3v1",
+    "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
+    "features": {
+        "ghcr.io/devcontainers-contrib/features/poetry:2": "1.7.1"
+    },
+    "postStartCommand": "pip install poetry-dynamic-versioning twine && poetry install",
+}
