@@ -1,5 +1,14 @@
 # CHANGELOG
 
+
+
+## v1.0.0-rc.2 (2024-06-08)
+
+### Ci
+
+* ci: introduce PSR ([`77ff88d`](https://github.com/procube-open/downtime-csv/commit/77ff88dd688a5fd5484bd2e4469eec8119d71b5a))
+
+
 ## v1.0.0-rc.1 (2024-06-07)
 
 ### Unknown
