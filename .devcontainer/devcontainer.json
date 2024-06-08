@@ -4,5 +4,5 @@
     "features": {
         "ghcr.io/devcontainers-contrib/features/poetry:2": "1.7.1"
     },
-    "postStartCommand": "pip install poetry-dynamic-versioning twine && poetry install",
+    "postStartCommand": "pip install poetry-dynamic-versioning twine && poetry install"
 }
