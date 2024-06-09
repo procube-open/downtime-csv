@@ -2,6 +2,13 @@
 
 
 
+## v1.0.2-rc.1 (2024-06-09)
+
+### Documentation
+
+* docs: add documents ([`c72c847`](https://github.com/procube-open/downtime-csv/commit/c72c84789477ddcbffa7dbc909ce7f3762195347))
+
+
 ## v1.0.1 (2024-06-08)
 
 
