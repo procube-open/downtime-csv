@@ -8,6 +8,10 @@
 
 * docs: add documents ([`c72c847`](https://github.com/procube-open/downtime-csv/commit/c72c84789477ddcbffa7dbc909ce7f3762195347))
 
+### Unknown
+
+* add LICENSE ([`6d05f49`](https://github.com/procube-open/downtime-csv/commit/6d05f49682a8577827b108f94a1739061d4d65ef))
+
 
 ## v1.0.1 (2024-06-08)
 
