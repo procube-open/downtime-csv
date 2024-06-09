@@ -1,9 +1,10 @@
 [tool.poetry]
 name = "downtime-csv"
-version = "1.0.0-rc.1"
-description = ""
+version = "0.0.0"
+description = "A tool that measures the downtime from the user's perspective when restarting a web server and outputs it to a CSV file."
 authors = ["Mitsuru Nakakawaji <mitsuru@procube.jp>"]
 readme = "README.md"
+repository = "https://github.com/procube-open/downtime-csv"
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -15,7 +16,7 @@ python-semantic-release = "^9.8.1"
 
 [tool.poetry-dynamic-versioning]
 enable = true
-style = "pep440"
+style = "semver"
 
 [tool.semantic_release]
 version_variable = "pyproject.toml:version"
