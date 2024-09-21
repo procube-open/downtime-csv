@@ -51,7 +51,7 @@ def main():
     args = parse_args()
     headers = parse_headers(args.header)
     output_headers = args.output_header
-    requote_redirect_url = args.follow_redirect
+    requote_redirect_url = args.requote_redirect_url
     url = args.url
     asyncio.run(downtime(url, headers, output_headers, requote_redirect_url))
 
