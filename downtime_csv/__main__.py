@@ -26,7 +26,7 @@ async def do_query(url, headers, output_headers, allow_redirect):
     async with aiohttp.ClientSession() as session:
         try:
             tat_start = time.time_ns()
-            async with session.get(url, headers=headers, allow_redirect=allow_redirect) as resp:
+            async with session.get(url, allow_redirect, headers=headers) as resp:
                 await resp.text()
                 tat_end = time.time_ns()
                 tat = tat_end - tat_start
