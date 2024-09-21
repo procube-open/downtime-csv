@@ -12,7 +12,7 @@ def parse_args():
     parser.add_argument("url", help="URL to request")
     parser.add_argument("-H", "--header", action="append", help="Custom header to include in the request", default=[])
     parser.add_argument("-O", "--output-header", action="append", help="Response header to output in CSV", default=[])
-    parser.add_argument("-f", "--requote-redirect-url", action="store_true", help="Set requote_redirect_url to true")
+    parser.add_argument("-f", "--allow-redirect", action="store_true", help="Follow redirects")
     return parser.parse_args()
 
 def parse_headers(header_list):
@@ -22,10 +22,10 @@ def parse_headers(header_list):
         headers[key.strip()] = value.strip()
     return headers
 
-async def do_query(url, headers, output_headers, requote_redirect_url):
-    async with aiohttp.ClientSession(requote_redirect_url=requote_redirect_url) as session:
+async def do_query(url, headers, output_headers, allow_redirect):
+    async with aiohttp.ClientSession() as session:
         tat_start = time.time_ns()
-        async with session.get(url, headers=headers) as resp:
+        async with session.get(url, headers=headers, allow_redirect=allow_redirect) as resp:
             await resp.text()
             tat_end = time.time_ns()
             tat = tat_end - tat_start
@@ -39,10 +39,10 @@ async def do_query(url, headers, output_headers, requote_redirect_url):
                 csv_row.append(resp.headers.get(header, ''))
             print(','.join(map(str, csv_row)))
 
-async def downtime(url, headers, output_headers, requote_redirect_url):
+async def downtime(url, headers, output_headers, allow_redirect):
     task_list = []
     for i in range(1500):
-        task_list.append(asyncio.create_task(do_query(url, headers, output_headers, requote_redirect_url)))
+        task_list.append(asyncio.create_task(do_query(url, headers, output_headers, allow_redirect)))
         await asyncio.sleep(0.2)
     for j in task_list:
         await j
@@ -51,9 +51,9 @@ def main():
     args = parse_args()
     headers = parse_headers(args.header)
     output_headers = args.output_header
-    requote_redirect_url = args.requote_redirect_url
+    allow_redirect = args.allow_redirect
     url = args.url
-    asyncio.run(downtime(url, headers, output_headers, requote_redirect_url))
+    asyncio.run(downtime(url, headers, output_headers, allow_redirect))
 
 if __name__ == '__main__':
     main()
