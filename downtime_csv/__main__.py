@@ -12,6 +12,7 @@ def parse_args():
     parser.add_argument("url", help="URL to request")
     parser.add_argument("-H", "--header", action="append", help="Custom header to include in the request", default=[])
     parser.add_argument("-O", "--output-header", action="append", help="Response header to output in CSV", default=[])
+    parser.add_argument("-f", "--requote-redirect-url", help="Re quote’s redirect urls", default=False)
     return parser.parse_args()
 
 def parse_headers(header_list):
@@ -21,8 +22,8 @@ def parse_headers(header_list):
         headers[key.strip()] = value.strip()
     return headers
 
-async def do_query(url, headers, output_headers):
-    async with aiohttp.ClientSession() as session:
+async def do_query(url, headers, output_headers, requote_redirect_url):
+    async with aiohttp.ClientSession(requote_redirect_url=requote_redirect_url) as session:
         tat_start = time.time_ns()
         async with session.get(url, headers=headers) as resp:
             await resp.text()
@@ -38,10 +39,10 @@ async def do_query(url, headers, output_headers):
                 csv_row.append(resp.headers.get(header, ''))
             print(','.join(map(str, csv_row)))
 
-async def downtime(url, headers, output_headers):
+async def downtime(url, headers, output_headers, requote_redirect_url):
     task_list = []
     for i in range(1500):
-        task_list.append(asyncio.create_task(do_query(url, headers, output_headers)))
+        task_list.append(asyncio.create_task(do_query(url, headers, output_headers, requote_redirect_url)))
         await asyncio.sleep(0.2)
     for j in task_list:
         await j
@@ -50,8 +51,9 @@ def main():
     args = parse_args()
     headers = parse_headers(args.header)
     output_headers = args.output_header
+    requote_redirect_url = args.follow_redirect
     url = args.url
-    asyncio.run(downtime(url, headers, output_headers))
+    asyncio.run(downtime(url, headers, output_headers, requote_redirect_url))
 
 if __name__ == '__main__':
     main()
