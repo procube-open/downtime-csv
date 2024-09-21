@@ -12,7 +12,7 @@ def parse_args():
     parser.add_argument("url", help="URL to request")
     parser.add_argument("-H", "--header", action="append", help="Custom header to include in the request", default=[])
     parser.add_argument("-O", "--output-header", action="append", help="Response header to output in CSV", default=[])
-    parser.add_argument("-f", "--requote-redirect-url", help="Re quote’s redirect urls", default=False)
+    parser.add_argument("-f", "--requote-redirect-url", action="store_true", help="Set requote_redirect_url to true")
     return parser.parse_args()
 
 def parse_headers(header_list):
