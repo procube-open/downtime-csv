@@ -4,33 +4,54 @@ import aiohttp
 import asyncio
 import time
 import sys
+import argparse
+import csv
 
-if len(sys.argv) != 2:
-    print(f'invalid argument length: {sys.argv[0]} URL', file=sys.stderr)
-    sys.exit(1)
+def parse_args():
+    parser = argparse.ArgumentParser(description="HTTP request script with custom headers and CSV output")
+    parser.add_argument("url", help="URL to request")
+    parser.add_argument("-H", "--header", action="append", help="Custom header to include in the request", default=[])
+    parser.add_argument("-O", "--output-header", action="append", help="Response header to output in CSV", default=[])
+    return parser.parse_args()
 
-url = sys.argv[1]
+def parse_headers(header_list):
+    headers = {}
+    for header in header_list:
+        key, value = header.split(":", 1)
+        headers[key.strip()] = value.strip()
+    return headers
 
-async def doQuery():
+async def do_query(url, headers, output_headers):
     async with aiohttp.ClientSession() as session:
         tat_start = time.time_ns()
-        async with session.get(url) as resp:
+        async with session.get(url, headers=headers) as resp:
             await resp.text()
             tat_end = time.time_ns()
             tat = tat_end - tat_start
             mlsec = int(tat_start % 1000000000 / 1000000)
-            print(f'{time.strftime('%X', time.localtime(tat_start/1000000000))}.{str(mlsec).zfill(3)},{int(tat/1000000)},{resp.status}')
+            csv_row = [
+                f'{time.strftime("%X", time.localtime(tat_start/1000000000))}.{str(mlsec).zfill(3)}',
+                int(tat/1000000),
+                resp.status
+            ]
+            for header in output_headers:
+                csv_row.append(resp.headers.get(header, ''))
+            print(','.join(map(str, csv_row)))
 
-async def downtime():
+async def downtime(url, headers, output_headers):
     task_list = []
     for i in range(1500):
-        task_list.append(asyncio.create_task(doQuery()))
+        task_list.append(asyncio.create_task(do_query(url, headers, output_headers)))
         await asyncio.sleep(0.2)
     for j in task_list:
         await j
 
 def main():
-    asyncio.run(downtime())
+    args = parse_args()
+    headers = parse_headers(args.header)
+    output_headers = args.output_header
+    url = args.url
+    asyncio.run(downtime(url, headers, output_headers))
 
 if __name__ == '__main__':
     main()

@@ -1,8 +1,26 @@
 {
-    "name": "ID Manager for SOBO gen3v1",
-    "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
+    "name": "downtime csv",
+    "image": "mcr.microsoft.com/vscode/devcontainers/python:3.12",
     "features": {
         "ghcr.io/devcontainers-contrib/features/poetry:2": "1.7.1"
     },
-    "postStartCommand": "pip install poetry-dynamic-versioning twine && poetry install"
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.pythonPath": "${workspaceFolder}/.venv/bin/python",
+                "terminal.integrated.shell.linux": "/bin/bash"
+            },
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-python.pylint",
+                "ms-python.debugpy",
+                "ms-python.black-formatter",
+                "tamasfe.even-better-toml",
+                "reporting-cz.omegasheets-vscode",
+                "github.vscode-github-actions"
+            ]
+        }
+    },
+    "postCreateCommand": "pip install poetry-dynamic-versioning twine && poetry config virtualenvs.in-project true && poetry install && echo 'source $(poetry env info --path)/bin/activate' >> ~/.bashrc"
 }
