@@ -24,20 +24,23 @@ def parse_headers(header_list):
 
 async def do_query(url, headers, output_headers, allow_redirect):
     async with aiohttp.ClientSession() as session:
-        tat_start = time.time_ns()
-        async with session.get(url, headers=headers, allow_redirect=allow_redirect) as resp:
-            await resp.text()
-            tat_end = time.time_ns()
-            tat = tat_end - tat_start
-            mlsec = int(tat_start % 1000000000 / 1000000)
-            csv_row = [
-                f'{time.strftime("%X", time.localtime(tat_start/1000000000))}.{str(mlsec).zfill(3)}',
-                int(tat/1000000),
-                resp.status
-            ]
-            for header in output_headers:
-                csv_row.append(resp.headers.get(header, ''))
-            print(','.join(map(str, csv_row)))
+        try:
+            tat_start = time.time_ns()
+            async with session.get(url, headers=headers, allow_redirect=allow_redirect) as resp:
+                await resp.text()
+                tat_end = time.time_ns()
+                tat = tat_end - tat_start
+                mlsec = int(tat_start % 1000000000 / 1000000)
+                csv_row = [
+                    f'{time.strftime("%X", time.localtime(tat_start/1000000000))}.{str(mlsec).zfill(3)}',
+                    int(tat/1000000),
+                    resp.status
+                ]
+                for header in output_headers:
+                    csv_row.append(resp.headers.get(header, ''))
+                print(','.join(map(str, csv_row)))
+        except Exception as e:
+            print(f"Error occurred: {e}")
 
 async def downtime(url, headers, output_headers, allow_redirect):
     task_list = []
