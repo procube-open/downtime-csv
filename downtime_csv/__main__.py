@@ -5,6 +5,7 @@ import asyncio
 import time
 import argparse
 import csv
+import io
 
 def parse_args():
     parser = argparse.ArgumentParser(description="HTTP request script with custom headers and CSV output")
