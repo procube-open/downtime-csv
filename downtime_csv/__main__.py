@@ -3,7 +3,6 @@
 import aiohttp
 import asyncio
 import time
-import sys
 import argparse
 import csv
 
@@ -22,6 +21,12 @@ def parse_headers(header_list):
         headers[key.strip()] = value.strip()
     return headers
 
+def format_csv_row(row):
+    output = io.StringIO()
+    writer = csv.writer(output, quoting=csv.QUOTE_MINIMAL)
+    writer.writerow(row)
+    return output.getvalue().strip()
+
 async def do_query(url, headers, output_headers, allow_redirects):
     async with aiohttp.ClientSession() as session:
         try:
@@ -38,7 +43,7 @@ async def do_query(url, headers, output_headers, allow_redirects):
                 ]
                 for header in output_headers:
                     csv_row.append(resp.headers.get(header, ''))
-                print(','.join(map(str, csv_row)))
+                print(format_csv_row(csv_row))
         except Exception as e:
             print(f"Error occurred: {e}")
 
@@ -56,6 +61,9 @@ def main():
     output_headers = args.output_header
     allow_redirects = args.allow_redirects
     url = args.url
+    # Print CSV header
+    csv_header = ["Time", "TAT(ms)", "Status"] + output_headers
+    print(format_csv_row(csv_header))
     asyncio.run(downtime(url, headers, output_headers, allow_redirects))
 
 if __name__ == '__main__':
