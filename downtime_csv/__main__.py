@@ -13,6 +13,7 @@ def parse_args():
     parser.add_argument("-H", "--header", action="append", help="Custom header to include in the request", default=[])
     parser.add_argument("-O", "--output-header", action="append", help="Response header to output in CSV", default=[])
     parser.add_argument("-f", "--allow-redirects", action="store_true", help="Follow redirects")
+    parser.add_argument("-i", "--interval", type=int, default=200, help="Interval between requests in milliseconds")
     return parser.parse_args()
 
 def parse_headers(header_list):
@@ -48,11 +49,11 @@ async def do_query(url, headers, output_headers, allow_redirects):
         except Exception as e:
             print(f"Error occurred: {e}")
 
-async def downtime(url, headers, output_headers, allow_redirects):
+async def downtime(url, headers, output_headers, allow_redirects, interval):
     task_list = []
     for i in range(1500):
         task_list.append(asyncio.create_task(do_query(url, headers, output_headers, allow_redirects)))
-        await asyncio.sleep(0.2)
+        await asyncio.sleep(interval / 1000.0)
     for j in task_list:
         await j
 
@@ -62,10 +63,11 @@ def main():
     output_headers = args.output_header
     allow_redirects = args.allow_redirects
     url = args.url
+    interval = args.interval
     # Print CSV header
     csv_header = ["Time", "TAT(ms)", "Status"] + output_headers
     print(format_csv_row(csv_header))
-    asyncio.run(downtime(url, headers, output_headers, allow_redirects))
+    asyncio.run(downtime(url, headers, output_headers, allow_redirects, interval))
 
 if __name__ == '__main__':
     main()
