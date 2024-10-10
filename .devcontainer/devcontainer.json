@@ -7,6 +7,12 @@
     "customizations": {
         "vscode": {
             "settings": {
+                "pylint.path": [
+                    "${workspaceFolder}/.env/bin/python",
+                    "-m",
+                    "pylint"
+                ],
+                "python.analysis.extraPaths": ["${workspaceFolder}/.venv/lib/python3.12/site-packages/"],
                 "python.pythonPath": "${workspaceFolder}/.venv/bin/python",
                 "terminal.integrated.shell.linux": "/bin/bash"
             },
