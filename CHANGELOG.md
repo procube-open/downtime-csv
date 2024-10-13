@@ -2,6 +2,37 @@
 
 
 
+## v1.0.4 (2024-10-13)
+
+### Feature
+
+* feat: support headers (#1)
+
+* feat: support headers
+
+* feat: support re quote redirect option
+
+* fix: AttributeError: &#39;Namespace&#39; object has no attribute &#39;follow_redirect&#39;
+
+* fix: error: argument -f/--requote-redirect-url: expected one argument
+
+* fix: always follow redirect
+
+* feat: print error message
+
+* fix: ClientSession._request() got an unexpected keyword argument &#39;allow_redirect&#39;
+
+* fix: ClientSession.get() takes 2 positional arguments but 3 were given
+
+* feat: support CSV quoting
+
+* fix: name &#39;io&#39; is not defined. Did you mean: &#39;id&#39;? Or did you forget to import &#39;io&#39;?
+
+* feat: support variable interval
+
+* fix: decode error ([`58bee98`](https://github.com/procube-open/downtime-csv/commit/58bee98a4d56fac32abc7f86dfe3442af04fbd82))
+
+
 ## v1.0.2-rc.1 (2024-06-09)
 
 ### Documentation
